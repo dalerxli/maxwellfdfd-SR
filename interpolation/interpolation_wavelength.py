@@ -140,6 +140,8 @@ for wavelength_N in wavelength:
     Y_RMSE_ydata, Y_R2_ydata = [], []
     Z_RMSE_ydata, Z_R2_ydata = [], []
 
+    parameters = {'xtick.labelsize': 20, 'ytick.labelsize': 20}
+    plt.rcParams.update(parameters)
     plt.figure(figsize=(8, 8))
 
     for j in range(np.array(ydata).shape[0]):
@@ -182,8 +184,12 @@ for wavelength_N in wavelength:
         pd.DataFrame(xdata[i][:, :, 1]).to_csv('%s/%s_Y.csv' % (prediction_save_path, i + 1))
         pd.DataFrame(xdata[i][:, :, 2]).to_csv('%s/%s_Z.csv' % (prediction_save_path, i + 1))
 
-    plt.xlabel('Prediction', fontsize=25)
-    plt.ylabel('Actual', fontsize=25)
+    plt.xlabel('Prediction', fontsize=30)
+    plt.ylabel('Actual', fontsize=30)
+    plt.xlim([0, 3])
+    plt.ylim([0, 3])
+    plt.xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
+    plt.yticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
     plt.savefig('%s/interpolation.tiff' % (save_path), dpi=300)
     plt.clf()
 

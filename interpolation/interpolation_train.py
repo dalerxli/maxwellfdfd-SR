@@ -160,6 +160,8 @@ X_RMSE_train_all, X_R2_train_all, X_RMSE_test_all, X_R2_test_all = [], [], [], [
 Y_RMSE_train_all, Y_R2_train_all, Y_RMSE_test_all, Y_R2_test_all = [], [], [], []
 Z_RMSE_train_all, Z_R2_train_all, Z_RMSE_test_all, Z_R2_test_all = [], [], [], []
 
+parameters = {'xtick.labelsize': 20, 'ytick.labelsize': 20}
+plt.rcParams.update(parameters)
 plt.figure(figsize=(8, 8))
 
 for model_number in range(8):
@@ -245,7 +247,11 @@ for model_number in range(8):
 
 save_3()
 
-plt.xlabel('Prediction', fontsize=25)
-plt.ylabel('Actual', fontsize=25)
+plt.xlabel('Prediction', fontsize=30)
+plt.ylabel('Actual', fontsize=30)
+plt.xlim([0, 3])
+plt.ylim([0, 3])
+plt.xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
+plt.yticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
 plt.savefig('%s/interpolation.tiff' %(train_save_path), dpi=300)
 plt.clf()
