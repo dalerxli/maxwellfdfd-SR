@@ -16,7 +16,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.preprocessing import StandardScaler
 
 
-model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , RFSR: R , RFSR_L: L , RFSR_P: P :')
+model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R , FRSR_L: L , FRSR_P: P :')
 
 if model_name == 'S' or model_name == 'SRCNN' or model_name == 'srcnn' or model_name == 's':
     print('SRCNN')
@@ -30,22 +30,22 @@ elif model_name == 'F' or model_name == 'FSRCNN' or model_name == 'fsrcnn' or mo
     print('FSRCNN')
     model_name = 'FSRCNN'
     model_pick = 2
-elif model_name == 'R' or model_name == 'RFSR' or model_name == 'rfsr' or model_name == 'r':
-    print('RFSR')
-    model_name = 'RFSR'
+elif model_name == 'R' or model_name == 'FRSR' or model_name == 'fRsr' or model_name == 'r':
+    print('FRSR')
+    model_name = 'FRSR'
     model_pick = 3
-elif model_name == 'L' or model_name == 'RFSR_L' or model_name == 'rfsr_l' or model_name == 'l':
-    print('RFSR_L')
-    model_name = 'RFSR_L'
+elif model_name == 'L' or model_name == 'FRSR_L' or model_name == 'fRsr_l' or model_name == 'l':
+    print('FRSR_L')
+    model_name = 'FRSR_L'
     model_pick = 4
-elif model_name == 'P' or model_name == 'RFSR_P' or model_name == 'rfsr_p' or model_name == 'p':
-    print('RFSR_P')
-    model_name = 'RFSR_P'
+elif model_name == 'P' or model_name == 'FRSR_P' or model_name == 'fRsr_p' or model_name == 'p':
+    print('FRSR_P')
+    model_name = 'FRSR_P'
     model_pick = 5
 else:
     print('model_name error')
 
-model_list = [SRCNN(), VDSR(), FSRCNN(), RFSR(), RFSR_L(), RFSR_P()]
+model_list = [SRCNN(), VDSR(), FSRCNN(), FRSR(), FRSR_L(), FRSR_P()]
 
 id = ['0001']
 wavelength = []

@@ -92,7 +92,7 @@ def createFolder(directory):
         print('Error: Creating directory. ' + directory)
     return directory
 
-model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , RFSR: R , RFSR_L: L , RFSR_P: P :')
+model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R , FRSR_L: L , FRSR_P: P :')
 
 if model_name == 'S' or model_name == 'SRCNN' or model_name == 'srcnn' or model_name == 's':
     print('SRCNN')
@@ -103,15 +103,15 @@ elif model_name == 'V' or model_name == 'VDSR' or model_name == 'vdsr' or model_
 elif model_name == 'F' or model_name == 'FSRCNN' or model_name == 'fsrcnn' or model_name == 'f':
     print('FSRCNN')
     model_name = 'FSRCNN'
-elif model_name == 'R' or model_name == 'RFSR' or model_name == 'rfsr' or model_name == 'r':
-    print('RFSR')
-    model_name = 'RFSR'
-elif model_name == 'L' or model_name == 'RFSR_L' or model_name == 'rfsr_l' or model_name == 'l':
-    print('RFSR_L')
-    model_name = 'RFSR_L'
-elif model_name == 'P' or model_name == 'RFSR_P' or model_name == 'rfsr_p' or model_name == 'p':
-    print('RFSR_P')
-    model_name = 'RFSR_P'
+elif model_name == 'R' or model_name == 'FRSR' or model_name == 'Frsr' or model_name == 'r':
+    print('FRSR')
+    model_name = 'FRSR'
+elif model_name == 'L' or model_name == 'FRSR_L' or model_name == 'Frsr_l' or model_name == 'l':
+    print('FRSR_L')
+    model_name = 'FRSR_L'
+elif model_name == 'P' or model_name == 'FRSR_P' or model_name == 'Frsr_p' or model_name == 'p':
+    print('FRSR_P')
+    model_name = 'FRSR_P'
 else:
     print('model_name error')
 
@@ -182,7 +182,10 @@ for wavelength_N in wavelength:
                                                                                         xdata.shape[1],
                                                                                         xdata.shape[2], 1)
 
+    parameters = {'xtick.labelsize': 20, 'ytick.labelsize': 20}
+    plt.rcParams.update(parameters)
     plt.figure(figsize=(8, 8))
+
     ydata_result_all = {}
     start_time = time.time()
     for i in range(len(model_path)):
@@ -249,10 +252,12 @@ for wavelength_N in wavelength:
         pd.DataFrame(ydata_result[i][:, :, 1]).to_csv('%s/%s_Y.csv' % (prediction_save_path, i + 1))
         pd.DataFrame(ydata_result[i][:, :, 2]).to_csv('%s/%s_Z.csv' % (prediction_save_path, i + 1))
 
-    plt.xlabel('Prediction', fontsize=25)
-    plt.ylabel('Actual', fontsize=25)
+    plt.xlabel('Prediction', fontsize=30)
+    plt.ylabel('Actual', fontsize=30)
     plt.xlim([0, 3])
     plt.ylim([0, 3])
+    plt.xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
+    plt.yticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
     plt.savefig('%s/%s.tiff' % (save_path, model_name), dpi=300)
     plt.clf()
 

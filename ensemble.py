@@ -95,7 +95,7 @@ def createFolder(directory):
         print('Error: Creating directory. ' + directory)
     return directory
 
-model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , RFSR: R , RFSR_L: L , RFSR_P: P :')
+model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R , FRSR_L: L , FRSR_P: P :')
 
 if model_name == 'S' or model_name == 'SRCNN' or model_name == 'srcnn' or model_name == 's':
     print('SRCNN')
@@ -106,15 +106,15 @@ elif model_name == 'V' or model_name == 'VDSR' or model_name == 'vdsr' or model_
 elif model_name == 'F' or model_name == 'FSRCNN' or model_name == 'fsrcnn' or model_name == 'f':
     print('FSRCNN')
     model_name = 'FSRCNN'
-elif model_name == 'R' or model_name == 'RFSR' or model_name == 'rfsr' or model_name == 'r':
-    print('RFSR')
-    model_name = 'RFSR'
-elif model_name == 'L' or model_name == 'RFSR_L' or model_name == 'rfsr_l' or model_name == 'l':
-    print('RFSR_L')
-    model_name = 'RFSR_L'
-elif model_name == 'P' or model_name == 'RFSR_P' or model_name == 'rfsr_p' or model_name == 'p':
-    print('RFSR_P')
-    model_name = 'RFSR_P'
+elif model_name == 'R' or model_name == 'FRSR' or model_name == 'frsr' or model_name == 'r':
+    print('FRSR')
+    model_name = 'FRSR'
+elif model_name == 'L' or model_name == 'FRSR_L' or model_name == 'frsr_l' or model_name == 'l':
+    print('FRSR_L')
+    model_name = 'FRSR_L'
+elif model_name == 'P' or model_name == 'FRSR_P' or model_name == 'frsr_p' or model_name == 'p':
+    print('FRSR_P')
+    model_name = 'FRSR_P'
 else:
     print('model_name error')
 
@@ -141,7 +141,7 @@ if data_location == 's':
 elif data_location == 'c':
     # computer
     dir_path = 'D:/project/SR/SRmodel/result/%s/save_model/' % (model_name)
-    save_path = createFolder('D:/project/SR/SRmodel/result_1/%s/test/' % (model_name))
+    save_path = createFolder('D:/project/SR/SRmodel/result/%s/test/' % (model_name))
 else:
     print('data location error')
 
@@ -180,7 +180,6 @@ xdata[:, :, :, 2:3] = scalers_z.transform(xdata[:, :, :, 2].reshape(-1, 1)).resh
                                                                                     xdata.shape[1],
                                                                                     xdata.shape[2], 1)
 
-plt.figure(figsize=(8, 8))
 ydata_result_all = {}
 start_time = time.time()
 for i in range(len(model_path)):
@@ -207,6 +206,10 @@ ydata_result[ydata_result < 0] = 0
 X_RMSE_ydata, X_R2_ydata = [], []
 Y_RMSE_ydata, Y_R2_ydata = [], []
 Z_RMSE_ydata, Z_R2_ydata = [], []
+
+parameters = {'xtick.labelsize': 20, 'ytick.labelsize': 20}
+plt.rcParams.update(parameters)
+plt.figure(figsize=(8, 8))
 
 for j in range(np.array(ydata).shape[0]):
     X_RMSE_ydata.append(mean_squared_error(ydata_result[j][:, :, 0],
@@ -261,9 +264,12 @@ pd.DataFrame(ydata_result[800][:, :, 0]).to_csv('%s/9_X.csv' % (prediction_save_
 pd.DataFrame(ydata_result[800][:, :, 1]).to_csv('%s/9_Y.csv' % (prediction_save_path))
 pd.DataFrame(ydata_result[800][:, :, 2]).to_csv('%s/9_Z.csv' % (prediction_save_path))
 
-plt.xlabel('Prediction', fontsize=25)
-plt.ylabel('Actual', fontsize=25)
+plt.xlabel('Prediction', fontsize=30)
+plt.ylabel('Actual', fontsize=30)
 plt.xlim([0, 3])
 plt.ylim([0, 3])
+plt.xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
+plt.yticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
 plt.savefig('%s/%s.tiff' % (save_path, model_name), dpi=300)
+# plt.show()
 plt.clf()

@@ -73,7 +73,7 @@ def VDSR():
     model.compile(optimizer=adam, loss='mse', metrics=['accuracy'])
     return model
 
-def RFSR():
+def FRSR():
     input_img = Input(shape=(200, 200, 3))
     input_img_ip = tf.image.resize(input_img, [400, 400], method='bicubic')
     model = Conv2D(64, (5, 5), padding='same', kernel_initializer='he_normal')(input_img)
@@ -100,7 +100,7 @@ def RFSR():
     model.compile(optimizer=adam, loss='mse', metrics=['accuracy'])
     return model
 
-def RFSR_L():
+def FRSR_L():
     input_img = Input(shape=(200, 200, 3))
     input_img_ip = tf.image.resize(input_img, [400, 400], method='bicubic')
     model = Conv2D(64, (5, 5), padding='same', kernel_initializer='he_normal')(input_img)
@@ -127,7 +127,7 @@ def RFSR_L():
     model.compile(optimizer=adam, loss='mse', metrics=['accuracy'])
     return model
 
-def RFSR_P():
+def FRSR_P():
     input_img = Input(shape=(200, 200, 3))
     input_img_ip = tf.image.resize(input_img, [400, 400], method='bicubic')
     model = Conv2D(64, (5, 5), padding='same', kernel_initializer='he_normal')(input_img)
