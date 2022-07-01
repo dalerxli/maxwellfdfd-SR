@@ -107,24 +107,16 @@ for wavelength_N in wavelength:
         random_image = '/home/jang/project/SRmodel/data/test_random_folder/%s/%s' %(id[0], wavelength_N)
         simple_image = '/home/jang/project/SRmodel/data/test_simple_folder/%s/%s' %(id[0], wavelength_N)
         image = [simple_image, random_image]
+        save_path = createFolder('/home/jang/project/SRmodel/result/interpolation/test_wavelength/%s' % (wavelength_N))
     elif data_location == 'c':
         print('computer')
         # computer
         random_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/%s/%s' %(id[0], wavelength_N)
         simple_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_simple_folder/%s/%s' %(id[0], wavelength_N)
         image = [simple_image, random_image]
+        save_path = createFolder('D:/project/SR/SRmodel/result/interpolation/test_wavelength/%s' % (wavelength_N))
     else:
         print('data location error')
-
-    if data_location == 's':
-        # server
-        save_path = createFolder('/home/jang/project/SRmodel/result/interpolation/test_wavelength/%s' %(wavelength_N))
-    elif data_location == 'c':
-        # computer
-        save_path = createFolder('D:/project/SR/SRmodel/result/interpolation/test_wavelength/%s' %(wavelength_N))
-    else:
-        print('data location error')
-
 
     xdata_file = data(10)
     ydata_file = data(5)
