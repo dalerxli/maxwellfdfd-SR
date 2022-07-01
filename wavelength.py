@@ -130,21 +130,14 @@ for wavelength_N in wavelength:
         random_image = '/home/jang/project/SRmodel/data/test_random_folder/%s/%s' %(id[0], wavelength_N)
         simple_image = '/home/jang/project/SRmodel/data/test_simple_folder/%s/%s' %(id[0], wavelength_N)
         image = [simple_image, random_image]
+        dir_path = "/home/jang/project/SRmodel/result/%s/save_model/" % (model_name)
+        save_path = createFolder('/home/jang/project/SRmodel/result/%s/test_wavelength/%s/' % (model_name, wavelength_N))
     elif data_location == 'c':
         print('computer')
         # computer
         random_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/%s/%s' %(id[0], wavelength_N)
         simple_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_simple_folder/%s/%s' %(id[0], wavelength_N)
         image = [simple_image, random_image]
-    else:
-        print('data location error')
-
-    if data_location == 's':
-        # server
-        dir_path = "/home/jang/project/SRmodel/result/%s/save_model/" % (model_name)
-        save_path = createFolder('/home/jang/project/SRmodel/result/%s/test_wavelength/%s/' % (model_name, wavelength_N))
-    elif data_location == 'c':
-        # computer
         dir_path = 'D:/project/SR/SRmodel/result/%s/save_model/' % (model_name)
         save_path = createFolder('D:/project/SR/SRmodel/result/%s/test_wavelength/%s/' % (model_name, wavelength_N))
     else:

@@ -20,19 +20,19 @@ def createFolder(directory):
         print('Error: Creating directory. ' + directory)
     return directory
 
-folder = createFolder('D:/project/SR/SRmodel/result/real_image/')
+folder = createFolder('D:/project/SR/SRmodel/sample/result/sample_image/')
 
-x_SR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR_L/test/predict_data/9_X.csv', index_col=0)
-y_SR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR_L/test/predict_data/9_Y.csv', index_col=0)
-z_SR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR_L/test/predict_data/9_Z.csv', index_col=0)
+x_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR_P/predict_data/sample_X.csv', index_col=0)
+y_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR_P/predict_data/sample_Y.csv', index_col=0)
+z_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR_P/predict_data/sample_Z.csv', index_col=0)
 
-x_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/result/FSRCNN/test/predict_data/9_X.csv', index_col=0)
-y_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/result/FSRCNN/test/predict_data/9_Y.csv', index_col=0)
-z_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/result/FSRCNN/test/predict_data/9_Z.csv', index_col=0)
+x_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/sample/result/FSRCNN/predict_data/sample_X.csv', index_col=0)
+y_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/sample/result/FSRCNN/predict_data/sample_Y.csv', index_col=0)
+z_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/sample/result/FSRCNN/predict_data/sample_Z.csv', index_col=0)
 
-x_SR_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_X.csv', index_col=0)
-y_SR_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_Y.csv', index_col=0)
-z_SR_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_Z.csv', index_col=0)
+x_SR_interpolation = pd.read_csv('D:/project/SR/SRmodel/sample/result/interpolation/predict_data/sample_X.csv', index_col=0)
+y_SR_interpolation = pd.read_csv('D:/project/SR/SRmodel/sample/result/interpolation/predict_data/sample_Y.csv', index_col=0)
+z_SR_interpolation = pd.read_csv('D:/project/SR/SRmodel/sample/result/interpolation/predict_data/sample_Z.csv', index_col=0)
 
 x_HR_real = h5_data('D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/0001/800/5/x/9.h5')
 y_HR_real = h5_data('D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/0001/800/5/y/9.h5')
@@ -107,12 +107,12 @@ plt.colorbar()
 plt.savefig('%s/9_X_LR.tiff' %folder, dpi=300)
 plt.show()
 
-plt.rcParams['figure.figsize'] = [10, 8]
-plt.pcolor(x_SR_FSRCNN, cmap='coolwarm')
-plt.clim(0, 1.75)
-plt.colorbar()
-plt.savefig('%s/9_X_SR_FSRCNN.tiff' %folder, dpi=300)
-plt.show()
+# plt.rcParams['figure.figsize'] = [10, 8]
+# plt.pcolor(x_SR_FSRCNN, cmap='coolwarm')
+# plt.clim(0, 1.75)
+# plt.colorbar()
+# plt.savefig('%s/9_X_SR_FSRCNN.tiff' %folder, dpi=300)
+# plt.show()
 
 
 #%% expand
@@ -121,46 +121,46 @@ parameters = {'xtick.labelsize': 30, 'ytick.labelsize': 30}
 plt.rcParams.update(parameters)
 
 plt.rcParams['figure.figsize'] = [9, 9]
-plt.pcolor(x_SR.iloc[40:120, 150:230], cmap='coolwarm')
+plt.pcolor(x_SR.iloc[40:100, 155:215], cmap='coolwarm')
 plt.clim(0, 1.75)
-plt.xticks([0, 20, 40, 60, 80], labels=[150, 170, 190, 210, 230])
-plt.yticks([0, 20, 40, 60, 80], labels=[40, 60, 80, 100, 120])
+plt.xticks([0, 15, 30, 45, 60], labels=[155, 170, 185, 200, 215])
+plt.yticks([0, 15, 30, 45, 60], labels=[40, 55, 70, 85, 100])
 plt.tick_params(length=20)
 plt.savefig('%s/9_X_SR_expand.tiff' %folder, dpi=300)
 plt.show()
 
 plt.rcParams['figure.figsize'] = [9, 9]
-plt.pcolor(x_HR[40:120, 150:230], cmap='coolwarm')
+plt.pcolor(x_HR[40:100, 155:215], cmap='coolwarm')
 plt.clim(0, 1.75)
-plt.xticks([0, 20, 40, 60, 80], labels=[150, 170, 190, 210, 230])
-plt.yticks([0, 20, 40, 60, 80], labels=[40, 60, 80, 100, 120])
+plt.xticks([0, 15, 30, 45, 60], labels=[155, 170, 185, 200, 215])
+plt.yticks([0, 15, 30, 45, 60], labels=[40, 55, 70, 85, 100])
 plt.tick_params(length=20)
 plt.savefig('%s/9_X_HR_expand.tiff' %folder, dpi=300)
 plt.show()
 
 plt.rcParams['figure.figsize'] = [9, 9]
-plt.pcolor(x_LR[20:60, 75:115], cmap='coolwarm')
+plt.pcolor(x_LR[20:50, 77:107], cmap='coolwarm')
 plt.clim(0, 1.75)
-plt.xticks([0, 10, 20, 30, 40], labels=[150, 170, 190, 210, 230])
-plt.yticks([0, 10, 20, 30, 40], labels=[40, 60, 80, 100, 120])
+plt.xticks([0, 7.5, 15, 22.5, 30], labels=[155, 170, 185, 200, 215])
+plt.yticks([0, 7.5, 15, 22.5, 30], labels=[40, 55, 70, 85, 100])
 plt.tick_params(length=20)
 plt.savefig('%s/9_X_LR_expand.tiff' %folder, dpi=300)
 plt.show()
 
 plt.rcParams['figure.figsize'] = [9, 9]
-plt.pcolor(x_SR_FSRCNN.iloc[40:120, 150:230], cmap='coolwarm')
+plt.pcolor(x_SR_FSRCNN.iloc[40:100, 155:215], cmap='coolwarm')
 plt.clim(0, 1.75)
-plt.xticks([0, 20, 40, 60, 80], labels=[150, 170, 190, 210, 230])
-plt.yticks([0, 20, 40, 60, 80], labels=[40, 60, 80, 100, 120])
+plt.xticks([0, 15, 30, 45, 60], labels=[155, 170, 185, 200, 215])
+plt.yticks([0, 15, 30, 45, 60], labels=[40, 55, 70, 85, 100])
 plt.tick_params(length=20)
 plt.savefig('%s/9_X_SR_FSRCNN_expand.tiff' %folder, dpi=300)
 plt.show()
 
 plt.rcParams['figure.figsize'] = [9, 9]
-plt.pcolor(x_SR_interpolation.iloc[40:120, 150:230], cmap='coolwarm')
+plt.pcolor(x_SR_interpolation.iloc[40:100, 155:215], cmap='coolwarm')
 plt.clim(0, 1.75)
-plt.xticks([0, 20, 40, 60, 80], labels=[150, 170, 190, 210, 230])
-plt.yticks([0, 20, 40, 60, 80], labels=[40, 60, 80, 100, 120])
+plt.xticks([0, 15, 30, 45, 60], labels=[155, 170, 185, 200, 215])
+plt.yticks([0, 15, 30, 45, 60], labels=[40, 55, 70, 85, 100])
 plt.tick_params(length=20)
 plt.savefig('%s/9_X_SR_interpolation_expand.tiff' %folder, dpi=300)
 plt.show()

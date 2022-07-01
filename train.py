@@ -160,20 +160,13 @@ if data_location == 's':
     random_image = '/home/jang/project/SRmodel/data/random_jangwon/'
     simple_image = '/home/jang/project/SRmodel/data/simple_jangwon/'
     image = [simple_image, random_image]
+    save_path = createFolder('/home/jang/project/SRmodel/result/%s/' % (model_name))
 elif data_location == 'c':
     print('computer')
     # computer
     random_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/random_jangwon/'
     simple_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/simple_jangwon/'
     image = [simple_image, random_image]
-else:
-    print('data location error')
-
-if data_location == 's':
-    # server
-    save_path = createFolder('/home/jang/project/SRmodel/result/%s/' % (model_name))
-elif data_location == 'c':
-    # computer
     save_path = createFolder('D:/project/SR/SRmodel/result_practice/%s/' % (model_name))
 else:
     print('data location error')

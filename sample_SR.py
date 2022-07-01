@@ -13,11 +13,7 @@ from sklearn.preprocessing import StandardScaler
 
 # os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
-id = ['0001']
-wavelength = []
-for i in range(24):
-    wavelength.append(400 + i*50)
-# wavelength = 800
+wavelength = [800]
 cs = [10, 5]
 EH = ['x', 'y', 'z']
 
@@ -37,7 +33,7 @@ def data(cs_value):
     x_path = []
     for i in range(len(image)):
         for j in range(len(wavelength)):
-            path = '%s%s/%s/%s/x/' %(image[i], id[0], wavelength[j], cs_value)
+            path = '%s/%s/%s/x/' %(image[i], wavelength[j], cs_value)
             for (root, directories, files) in os.walk(path):
                 for file in files:
                     if '.h5' in file:
@@ -47,7 +43,7 @@ def data(cs_value):
     y_path = []
     for i in range(len(image)):
         for j in range(len(wavelength)):
-            path = '%s%s/%s/%s/y/' % (image[i], id[0], wavelength[j], cs_value)
+            path = '%s/%s/%s/y/' % (image[i], wavelength[j], cs_value)
             for (root, directories, files) in os.walk(path):
                 for file in files:
                     if '.h5' in file:
@@ -57,7 +53,7 @@ def data(cs_value):
     z_path = []
     for i in range(len(image)):
         for j in range(len(wavelength)):
-            path = '%s%s/%s/%s/z/' % (image[i], id[0], wavelength[j], cs_value)
+            path = '%s/%s/%s/z/' % (image[i], wavelength[j], cs_value)
             for (root, directories, files) in os.walk(path):
                 for file in files:
                     if '.h5' in file:
@@ -122,19 +118,17 @@ data_location = input('server --> s or computer --> c: ')
 if data_location == 's':
     print('server')
     # server
-    random_image = '/home/jang/project/SRmodel/data/test_random_folder/'
-    simple_image = '/home/jang/project/SRmodel/data/test_simple_folder/'
-    image = [simple_image, random_image]
+    random_image = '/home/jang/project/SRmodel/sample/data/'
+    image = [random_image]
     dir_path = "/home/jang/project/SRmodel/result/%s/save_model/" % (model_name)
-    save_path = createFolder('/home/jang/project/SRmodel/result/%s/test/' % (model_name))
+    save_path = createFolder('/home/jang/project/SRmodel/sample/result/%s/' % (model_name))
 elif data_location == 'c':
     print('computer')
     # computer
-    random_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/'
-    simple_image = 'D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_simple_folder/'
-    image = [simple_image, random_image]
+    random_image = 'D:/project/SR/SRmodel/sample/data/'
+    image = [random_image]
     dir_path = 'D:/project/SR/SRmodel/result/%s/save_model/' % (model_name)
-    save_path = createFolder('D:/project/SR/SRmodel/result/%s/test/' % (model_name))
+    save_path = createFolder('D:/project/SR/SRmodel/sample/result/%s/' % (model_name))
 else:
     print('data location error')
 
@@ -248,14 +242,9 @@ pd.DataFrame(data_all).to_csv('%s/result.csv' % (save_path),
 
 prediction_save_path = createFolder('%s/predict_data/' % (save_path))
 
-for i in [1, -1]:
-    pd.DataFrame(ydata_result[i][:, :, 0]).to_csv('%s/%s_X.csv' % (prediction_save_path, i + 1))
-    pd.DataFrame(ydata_result[i][:, :, 1]).to_csv('%s/%s_Y.csv' % (prediction_save_path, i + 1))
-    pd.DataFrame(ydata_result[i][:, :, 2]).to_csv('%s/%s_Z.csv' % (prediction_save_path, i + 1))
-
-pd.DataFrame(ydata_result[800][:, :, 0]).to_csv('%s/9_X.csv' % (prediction_save_path))
-pd.DataFrame(ydata_result[800][:, :, 1]).to_csv('%s/9_Y.csv' % (prediction_save_path))
-pd.DataFrame(ydata_result[800][:, :, 2]).to_csv('%s/9_Z.csv' % (prediction_save_path))
+pd.DataFrame(ydata_result[:, :, :, 0:1].reshape(ydata_result[:, :, :, 0:1].shape[1], ydata_result[:, :, :, 0:1].shape[2])).to_csv('%s/sample_X.csv' % (prediction_save_path))
+pd.DataFrame(ydata_result[:, :, :, 1:2].reshape(ydata_result[:, :, :, 1:2].shape[1], ydata_result[:, :, :, 1:2].shape[2])).to_csv('%s/sample_Y.csv' % (prediction_save_path))
+pd.DataFrame(ydata_result[:, :, :, 2:3].reshape(ydata_result[:, :, :, 2:3].shape[1], ydata_result[:, :, :, 2:3].shape[2])).to_csv('%s/sample_Z.csv' % (prediction_save_path))
 
 plt.xlabel('Prediction', fontsize=30)
 plt.ylabel('Actual', fontsize=30)
