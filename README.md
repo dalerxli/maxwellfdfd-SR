@@ -1,4 +1,4 @@
-# maxwellfdfd-SR!
+# maxwellfdfd-SR
 
 Fast Residual learning Super-Resolution convolutional network (FRSR) 
 
