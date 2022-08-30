@@ -22,9 +22,9 @@ def createFolder(directory):
 
 folder = createFolder('D:/project/SR/SRmodel/sample/result/sample_image/')
 
-x_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR_P/predict_data/sample_X.csv', index_col=0)
-y_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR_P/predict_data/sample_Y.csv', index_col=0)
-z_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR_P/predict_data/sample_Z.csv', index_col=0)
+x_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR/predict_data/sample_X.csv', index_col=0)
+y_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR/predict_data/sample_Y.csv', index_col=0)
+z_SR = pd.read_csv('D:/project/SR/SRmodel/sample/result/FRSR/predict_data/sample_Z.csv', index_col=0)
 
 x_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/sample/result/FSRCNN/predict_data/sample_X.csv', index_col=0)
 y_SR_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/sample/result/FSRCNN/predict_data/sample_Y.csv', index_col=0)
