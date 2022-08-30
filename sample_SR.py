@@ -91,7 +91,7 @@ def createFolder(directory):
         print('Error: Creating directory. ' + directory)
     return directory
 
-model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R , FRSR_L: L , FRSR_P: P :')
+model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R :')
 
 if model_name == 'S' or model_name == 'SRCNN' or model_name == 'srcnn' or model_name == 's':
     print('SRCNN')
@@ -105,12 +105,6 @@ elif model_name == 'F' or model_name == 'FSRCNN' or model_name == 'fsrcnn' or mo
 elif model_name == 'R' or model_name == 'FRSR' or model_name == 'frsr' or model_name == 'r':
     print('FRSR')
     model_name = 'FRSR'
-elif model_name == 'L' or model_name == 'FRSR_L' or model_name == 'frsr_l' or model_name == 'l':
-    print('FRSR_L')
-    model_name = 'FRSR_L'
-elif model_name == 'P' or model_name == 'FRSR_P' or model_name == 'frsr_p' or model_name == 'p':
-    print('FRSR_P')
-    model_name = 'FRSR_P'
 else:
     print('model_name error')
 
@@ -142,6 +136,7 @@ for (root, directories, files) in os.walk('%s'%(dir_path)):
         if '.h5' in file:
             file_path = os.path.join(root, file)
             model_path.append(file_path)
+            
 xdata_file = data(10)
 ydata_file = data(5)
 xdata, ydata = h5_XYZ(xdata_file, ydata_file)
