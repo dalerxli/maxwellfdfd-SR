@@ -16,7 +16,7 @@ interpoltion_table = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/tes
 srcnn_table = pd.read_csv('D:/project/SR/SRmodel/result/SRCNN/test_wavelength/result.csv')
 fsrcnn_table = pd.read_csv('D:/project/SR/SRmodel/result/FSRCNN/test_wavelength/result.csv')
 vdsr_table = pd.read_csv('D:/project/SR/SRmodel/result/VDSR/test_wavelength/result.csv')
-frsr_table = pd.read_csv('D:/project/SR/SRmodel/result/FRSR_L/test_wavelength/result.csv')
+frsr_table = pd.read_csv('D:/project/SR/SRmodel/result/FRSR/test_wavelength/result.csv')
 
 interpolation = average_error(interpoltion_table)
 srcnn = average_error(srcnn_table)
