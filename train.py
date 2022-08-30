@@ -16,7 +16,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.preprocessing import StandardScaler
 
 
-model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R , FRSR_L: L , FRSR_P: P :')
+model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R :')
 
 if model_name == 'S' or model_name == 'SRCNN' or model_name == 'srcnn' or model_name == 's':
     print('SRCNN')
@@ -34,18 +34,10 @@ elif model_name == 'R' or model_name == 'FRSR' or model_name == 'fRsr' or model_
     print('FRSR')
     model_name = 'FRSR'
     model_pick = 3
-elif model_name == 'L' or model_name == 'FRSR_L' or model_name == 'fRsr_l' or model_name == 'l':
-    print('FRSR_L')
-    model_name = 'FRSR_L'
-    model_pick = 4
-elif model_name == 'P' or model_name == 'FRSR_P' or model_name == 'fRsr_p' or model_name == 'p':
-    print('FRSR_P')
-    model_name = 'FRSR_P'
-    model_pick = 5
 else:
     print('model_name error')
 
-model_list = [SRCNN(), VDSR(), FSRCNN(), FRSR(), FRSR_L(), FRSR_P()]
+model_list = [SRCNN(), VDSR(), FSRCNN(), FRSR()]
 
 id = ['0001']
 wavelength = []
