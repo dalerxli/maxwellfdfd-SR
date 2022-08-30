@@ -34,9 +34,9 @@ x_VDSR = pd.read_csv('D:/project/SR/SRmodel/result/VDSR/test/predict_data/9_X.cs
 y_VDSR = pd.read_csv('D:/project/SR/SRmodel/result/VDSR/test/predict_data/9_Y.csv', index_col=0)
 z_VDSR = pd.read_csv('D:/project/SR/SRmodel/result/VDSR/test/predict_data/9_Z.csv', index_col=0)
 
-x_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR_L/test/predict_data/9_X.csv', index_col=0)
-y_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR_L/test/predict_data/9_Y.csv', index_col=0)
-z_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR_L/test/predict_data/9_Z.csv', index_col=0)
+x_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR/test/predict_data/9_X.csv', index_col=0)
+y_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR/test/predict_data/9_Y.csv', index_col=0)
+z_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR/test/predict_data/9_Z.csv', index_col=0)
 
 x_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_X.csv', index_col=0)
 y_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_Y.csv', index_col=0)
