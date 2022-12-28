@@ -20,82 +20,49 @@ def createFolder(directory):
         print('Error: Creating directory. ' + directory)
     return directory
 
+def error_image(error, name):
+    parameters = {'xtick.labelsize': 30, 'ytick.labelsize': 30}
+    plt.rcParams.update(parameters)
+    plt.rcParams['figure.figsize'] = [10, 10]
+    plt.pcolor(error, cmap='gray')
+    plt.clim(0, 0.01)
+    # plt.colorbar()
+    plt.axis('off')
+    plt.savefig('%s/error_9_x_%s.tiff' %(folder, name), dpi=300)
+    # plt.show()
+    plt.close()
+
 folder = createFolder('D:/project/SR/SRmodel/result/error_image/')
+path = 'D:/project/SR/SRmodel/sample/result/'
 
-x_SRCNN = pd.read_csv('D:/project/SR/SRmodel/result/SRCNN/test/predict_data/9_X.csv', index_col=0)
-y_SRCNN = pd.read_csv('D:/project/SR/SRmodel/result/SRCNN/test/predict_data/9_Y.csv', index_col=0)
-z_SRCNN = pd.read_csv('D:/project/SR/SRmodel/result/SRCNN/test/predict_data/9_Z.csv', index_col=0)
+x_SRCNN = pd.read_csv('%s/SRCNN/predict_data/sample_X.csv' %path, index_col=0)
 
-x_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/result/FSRCNN/test/predict_data/9_X.csv', index_col=0)
-y_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/result/FSRCNN/test/predict_data/9_Y.csv', index_col=0)
-z_FSRCNN = pd.read_csv('D:/project/SR/SRmodel/result/FSRCNN/test/predict_data/9_Z.csv', index_col=0)
+x_FSRCNN = pd.read_csv('%s/FSRCNN/predict_data/sample_X.csv' %path, index_col=0)
 
-x_VDSR = pd.read_csv('D:/project/SR/SRmodel/result/VDSR/test/predict_data/9_X.csv', index_col=0)
-y_VDSR = pd.read_csv('D:/project/SR/SRmodel/result/VDSR/test/predict_data/9_Y.csv', index_col=0)
-z_VDSR = pd.read_csv('D:/project/SR/SRmodel/result/VDSR/test/predict_data/9_Z.csv', index_col=0)
+x_VDSR = pd.read_csv('%s/VDSR/predict_data/sample_X.csv' %path, index_col=0)
 
-x_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR/test/predict_data/9_X.csv', index_col=0)
-y_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR/test/predict_data/9_Y.csv', index_col=0)
-z_FRSR = pd.read_csv('D:/project/SR/SRmodel/result/FRSR/test/predict_data/9_Z.csv', index_col=0)
+x_LapSRN = pd.read_csv('%s/LapSRN/predict_data/sample_X.csv' %path, index_col=0)
 
-x_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_X.csv', index_col=0)
-y_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_Y.csv', index_col=0)
-z_interpolation = pd.read_csv('D:/project/SR/SRmodel/result/interpolation/test/predict_data/9_Z.csv', index_col=0)
+x_FRSR = pd.read_csv('%s/FRSR_L/predict_data/sample_X.csv' %path, index_col=0)
+
+x_interpolation = pd.read_csv('%s/interpolation/predict_data/sample_X.csv' %path, index_col=0)
 
 x_HR_real = h5_data('D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/0001/800/5/x/9.h5')
-y_HR_real = h5_data('D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/0001/800/5/y/9.h5')
-z_HR_real = h5_data('D:/project/SR/cdal_maxwellfdfd/maxwellfdfd/example/2d/test_random_folder/0001/800/5/z/9.h5')
+# D:/project/SR/SRmodel/sample/data/800/5
 
 x_HR = x_HR_real[220:620]
-y_HR = y_HR_real[220:620]
-z_HR = z_HR_real[220:620]
 
 error_SRCNN = np.abs(x_HR-x_SRCNN)
 error_FSRCNN = np.abs(x_HR-x_FSRCNN)
 error_VDSR = np.abs(x_HR-x_VDSR)
+error_LapSRN = np.abs(x_HR-x_LapSRN)
 error_FRSR = np.abs(x_HR-x_FRSR)
 error_interpolation = np.abs(x_HR-x_interpolation)
+
 #%% all image
-
-parameters = {'xtick.labelsize': 30, 'ytick.labelsize': 30}
-plt.rcParams.update(parameters)
-
-plt.rcParams['figure.figsize'] = [10, 10]
-plt.pcolor(error_SRCNN, cmap='gray')
-plt.clim(0, 0.01)
-# plt.colorbar()
-plt.axis('off')
-# plt.savefig('%s/error_9_x_SRCNN.tiff' %folder, dpi=300)
-plt.show()
-
-plt.rcParams['figure.figsize'] = [10, 10]
-plt.pcolor(error_FSRCNN, cmap='gray')
-plt.clim(0, 0.01)
-# plt.colorbar()
-plt.axis('off')
-# plt.savefig('%s/error_9_x_FSRCNN.tiff' %folder, dpi=300)
-plt.show()
-
-plt.rcParams['figure.figsize'] = [10, 10]
-plt.pcolor(error_VDSR, cmap='gray')
-plt.clim(0, 0.01)
-# plt.colorbar()
-plt.axis('off')
-# plt.savefig('%s/error_9_x_VDSR.tiff' %folder, dpi=300)
-plt.show()
-
-plt.rcParams['figure.figsize'] = [10, 10]
-plt.pcolor(error_FRSR, cmap='gray')
-plt.clim(0, 0.01)
-# plt.colorbar()
-plt.axis('off')
-# plt.savefig('%s/error_9_x_FRSR.tiff' %folder, dpi=300)
-plt.show()
-
-plt.rcParams['figure.figsize'] = [10, 10]
-plt.pcolor(error_interpolation, cmap='gray')
-plt.clim(0, 0.01)
-# plt.colorbar()
-plt.axis('off')
-# plt.savefig('%s/error_9_x_interpolation.tiff' %folder, dpi=300)
-plt.show()
+error_image(error_SRCNN,'SRCNN')
+error_image(error_FSRCNN, 'FSRCNN')
+error_image(error_VDSR, 'VDSR')
+error_image(error_LapSRN, 'LapSRN')
+error_image(error_FRSR, 'FRSR')
+error_image(error_interpolation, 'interpolation')

@@ -92,7 +92,17 @@ def createFolder(directory):
         print('Error: Creating directory. ' + directory)
     return directory
 
-model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R :')
+def evaluation(k):
+    RMSE = mean_squared_error(ydata_result[j][:, :, k], ydata[j][:, :, k]) ** 0.5
+    R2 = r2_score(ydata_result[j][:, :, k], ydata[j][:, :, k])
+    return RMSE, R2
+
+def evaluation_all(RMSE, R2):
+    RMSE_ = np.sum(RMSE) / np.array(RMSE).shape
+    R2_ = np.sum(R2) / np.array(R2).shape
+    return RMSE_, R2_
+
+model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R , FRSR_L: L , FRSR_P: P , LapSRN: A :')
 
 if model_name == 'S' or model_name == 'SRCNN' or model_name == 'srcnn' or model_name == 's':
     print('SRCNN')
@@ -106,6 +116,15 @@ elif model_name == 'F' or model_name == 'FSRCNN' or model_name == 'fsrcnn' or mo
 elif model_name == 'R' or model_name == 'FRSR' or model_name == 'Frsr' or model_name == 'r':
     print('FRSR')
     model_name = 'FRSR'
+elif model_name == 'L' or model_name == 'FRSR_L' or model_name == 'Frsr_l' or model_name == 'l':
+    print('FRSR_L')
+    model_name = 'FRSR_L'
+elif model_name == 'P' or model_name == 'FRSR_P' or model_name == 'Frsr_p' or model_name == 'p':
+    print('FRSR_P')
+    model_name = 'FRSR_P'
+elif model_name == 'A' or model_name == 'LapSRN' or model_name == 'lapsrn' or model_name == 'a':
+    print('LapSRN')
+    model_name = 'LapSRN'
 else:
     print('model_name error')
 
@@ -199,35 +218,36 @@ for wavelength_N in wavelength:
     Z_RMSE_ydata, Z_R2_ydata = [], []
 
     for j in range(np.array(ydata).shape[0]):
-        X_RMSE_ydata.append(mean_squared_error(ydata_result[j][:, :, 0],
-                                              ydata[j][:, :, 0]) ** 0.5)
-        X_R2_ydata.append(r2_score(ydata_result[j][:, :, 0],
-                                  ydata[j][:, :, 0]))
-        Y_RMSE_ydata.append(mean_squared_error(ydata_result[j][:, :, 1],
-                                              ydata[j][:, :, 1]) ** 0.5)
-        Y_R2_ydata.append(r2_score(ydata_result[j][:, :, 1],
-                                  ydata[j][:, :, 1]))
-        Z_RMSE_ydata.append(mean_squared_error(ydata_result[j][:, :, 2],
-                                              ydata[j][:, :, 2]) ** 0.5)
-        Z_R2_ydata.append(r2_score(ydata_result[j][:, :, 2],
-                                  ydata[j][:, :, 2]))
+        X_RMSE_ydata.append(evaluation(0)[0])
+        X_R2_ydata.append(evaluation(0)[1])
+
+        Y_RMSE_ydata.append(evaluation(1)[0])
+        Y_R2_ydata.append(evaluation(1)[1])
+
+        Z_RMSE_ydata.append(evaluation(2)[0])
+        Z_R2_ydata.append(evaluation(2)[1])
+
         if divmod(j, 100)[1] == 0:
             plt.scatter(ydata_result[j][:, :, 0].reshape(1, -1), ydata[j][:, :, 0].reshape(1, -1), c='black', s=1, alpha=0.4)
             plt.scatter(ydata_result[j][:, :, 1].reshape(1, -1), ydata[j][:, :, 1].reshape(1, -1), c='black', s=1, alpha=0.4)
             plt.scatter(ydata_result[j][:, :, 2].reshape(1, -1), ydata[j][:, :, 2].reshape(1, -1), c='black', s=1, alpha=0.4)
 
+    X_RMSE_ydata_in, X_R2_ydata_in = evaluation_all(X_RMSE_ydata, X_R2_ydata)
+    Y_RMSE_ydata_in, Y_R2_ydata_in = evaluation_all(Y_RMSE_ydata, Y_R2_ydata)
+    Z_RMSE_ydata_in, Z_R2_ydata_in = evaluation_all(Z_RMSE_ydata, Z_R2_ydata)
+
     print('ydata error')
     print(
         'X_RMSE_ydata: %.4f, X_R2_ydata: %.4f, Y_RMSE_ydata: %.4f, Y_R2_ydata: %.4f, Z_RMSE_ydata: %.4f, Z_R2_ydata: %.4f'
-        % (np.sum(X_RMSE_ydata) / np.array(X_RMSE_ydata).shape, np.sum(X_R2_ydata) / np.array(X_R2_ydata).shape,
-           np.sum(Y_RMSE_ydata) / np.array(Y_RMSE_ydata).shape, np.sum(Y_R2_ydata) / np.array(Y_R2_ydata).shape,
-           np.sum(Z_RMSE_ydata) / np.array(Z_RMSE_ydata).shape, np.sum(Z_R2_ydata) / np.array(Z_R2_ydata).shape))
+        % (X_RMSE_ydata_in, X_R2_ydata_in,
+           Y_RMSE_ydata_in, Y_R2_ydata_in,
+           Z_RMSE_ydata_in, Z_R2_ydata_in))
 
     print("--- %s seconds ---" % (time.time() - start_time))
     model_time = time.time() - start_time
-    data_all = [[float(np.sum(X_RMSE_ydata) / np.array(X_RMSE_ydata).shape), float(np.sum(X_R2_ydata) / np.array(X_R2_ydata).shape),
-                 float(np.sum(Y_RMSE_ydata) / np.array(Y_RMSE_ydata).shape), float(np.sum(Y_R2_ydata) / np.array(Y_R2_ydata).shape),
-                 float(np.sum(Z_RMSE_ydata) / np.array(Z_RMSE_ydata).shape), float(np.sum(Z_R2_ydata) / np.array(Z_R2_ydata).shape), model_time]]
+    data_all = [[float(X_RMSE_ydata_in), float(X_R2_ydata_in),
+                 float(Y_RMSE_ydata_in), float(Y_R2_ydata_in),
+                 float(Z_RMSE_ydata_in), float(Z_R2_ydata_in), model_time]]
 
     pd.DataFrame(data_all).to_csv('%s/result.csv' % (save_path),
                                       header=['X_RMSE', 'X_R2',
@@ -248,12 +268,12 @@ for wavelength_N in wavelength:
     plt.savefig('%s/%s.tiff' % (save_path, model_name), dpi=300)
     plt.clf()
 
-    X_RMSE_ydata_all.append(float(np.sum(X_RMSE_ydata) / np.array(X_RMSE_ydata).shape))
-    X_R2_ydata_all.append(float(np.sum(X_R2_ydata) / np.array(X_R2_ydata).shape))
-    Y_RMSE_ydata_all.append(float(np.sum(Y_RMSE_ydata) / np.array(Y_RMSE_ydata).shape))
-    Y_R2_ydata_all.append(float(np.sum(Y_R2_ydata) / np.array(Y_R2_ydata).shape))
-    Z_RMSE_ydata_all.append(float(np.sum(Z_RMSE_ydata) / np.array(Z_RMSE_ydata).shape))
-    Z_R2_ydata_all.append(float(np.sum(Z_R2_ydata) / np.array(Z_R2_ydata).shape))
+    X_RMSE_ydata_all.append(float(X_RMSE_ydata_in))
+    X_R2_ydata_all.append(float(X_R2_ydata_in))
+    Y_RMSE_ydata_all.append(float(Y_RMSE_ydata_in))
+    Y_R2_ydata_all.append(float(Y_R2_ydata_in))
+    Z_RMSE_ydata_all.append(float(Z_RMSE_ydata_in))
+    Z_R2_ydata_all.append(float(Z_R2_ydata_in))
     model_time_all.append(float(model_time))
 
 data_all = np.hstack((np.array(X_RMSE_ydata_all).reshape(-1, 1), np.array(X_R2_ydata_all).reshape(-1, 1),

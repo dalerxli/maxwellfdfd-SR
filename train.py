@@ -16,7 +16,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.preprocessing import StandardScaler
 
 
-model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R :')
+model_name = input('SRCNN: S , VDSR: V , FSRCNN: F , FRSR: R , FRSR_L: L , FRSR_P: P , LapSRN: A :')
 
 if model_name == 'S' or model_name == 'SRCNN' or model_name == 'srcnn' or model_name == 's':
     print('SRCNN')
@@ -34,10 +34,22 @@ elif model_name == 'R' or model_name == 'FRSR' or model_name == 'fRsr' or model_
     print('FRSR')
     model_name = 'FRSR'
     model_pick = 3
+elif model_name == 'L' or model_name == 'FRSR_L' or model_name == 'fRsr_l' or model_name == 'l':
+    print('FRSR_L')
+    model_name = 'FRSR_L'
+    model_pick = 4
+elif model_name == 'P' or model_name == 'FRSR_P' or model_name == 'fRsr_p' or model_name == 'p':
+    print('FRSR_P')
+    model_name = 'FRSR_P'
+    model_pick = 5
+elif model_name == 'A' or model_name == 'LapSRN' or model_name == 'lapsrn' or model_name == 'a':
+    print('LapSRN')
+    model_name = 'LapSRN'
+    model_pick = 6
 else:
     print('model_name error')
 
-model_list = [SRCNN(), VDSR(), FSRCNN(), FRSR()]
+model_list = [SRCNN(), VDSR(), FSRCNN(), FRSR(), FRSR_L(), FRSR_P(), LapSRN()]
 
 id = ['0001']
 wavelength = []
@@ -144,6 +156,21 @@ def save_3():
                                           'X_RMSE_test', 'X_R2_test', 'Y_RMSE_test', 'Y_R2_test', 'Z_RMSE_test', 'Z_R2_test'
                                       ,'time'], index=False)
     return print("save")
+
+def evaluation_train(k):
+    RMSE = mean_squared_error(train_result[j][:, :, k], y_train_real[j][:, :, k]) ** 0.5
+    R2 = r2_score(train_result[j][:, :, k], y_train_real[j][:, :, k])
+    return RMSE, R2
+
+def evaluation_test(k):
+    RMSE = mean_squared_error(test_result[j][:, :, k], y_test_real[j][:, :, k]) ** 0.5
+    R2 = r2_score(test_result[j][:, :, k], y_test_real[j][:, :, k])
+    return RMSE, R2
+
+def evaluation_all(RMSE, R2):
+    RMSE_ = np.sum(RMSE) / np.array(RMSE).shape
+    R2_ = np.sum(R2) / np.array(R2).shape
+    return RMSE_, R2_
 
 data_location = input('server --> s or computer --> c: ')
 if data_location == 's':
@@ -294,60 +321,45 @@ for model_number in range(opt.total_model_number):
     test_result[test_result < 0] = 0
 
     for j in range(np.array(X_train).shape[0]):
-        X_RMSE_train.append(mean_squared_error(train_result[j][:, :, 0],
-                                               y_train_real[j][:, :, 0]) ** 0.5)
-        X_R2_train.append(r2_score(train_result[j][:, :, 0],
-                                   y_train_real[j][:, :, 0]))
-        Y_RMSE_train.append(mean_squared_error(train_result[j][:, :, 1],
-                                               y_train_real[j][:, :, 1]) ** 0.5)
-        Y_R2_train.append(r2_score(train_result[j][:, :, 1],
-                                   y_train_real[j][:, :, 1]))
-        Z_RMSE_train.append(mean_squared_error(train_result[j][:, :, 2],
-                                               y_train_real[j][:, :, 2]) ** 0.5)
-        Z_R2_train.append(r2_score(train_result[j][:, :, 2],
-                                   y_train_real[j][:, :, 2]))
+        X_RMSE_train.append(evaluation_train(0)[0])
+        X_R2_train.append(evaluation_train(0)[1])
+
+        Y_RMSE_train.append(evaluation_train(1)[0])
+        Y_R2_train.append(evaluation_train(1)[1])
+
+        Z_RMSE_train.append(evaluation_train(2)[0])
+        Z_R2_train.append(evaluation_train(2)[1])
 
     for j in range(np.array(X_test).shape[0]):
-        X_RMSE_test.append(mean_squared_error(test_result[j][:, :, 0],
-                                              y_test_real[j][:, :, 0]) ** 0.5)
-        X_R2_test.append(r2_score(test_result[j][:, :, 0],
-                                  y_test_real[j][:, :, 0]))
-        Y_RMSE_test.append(mean_squared_error(test_result[j][:, :, 1],
-                                              y_test_real[j][:, :, 1]) ** 0.5)
-        Y_R2_test.append(r2_score(test_result[j][:, :, 1],
-                                  y_test_real[j][:, :, 1]))
-        Z_RMSE_test.append(mean_squared_error(test_result[j][:, :, 2],
-                                              y_test_real[j][:, :, 2]) ** 0.5)
-        Z_R2_test.append(r2_score(test_result[j][:, :, 2],
-                                  y_test_real[j][:, :, 2]))
+        X_RMSE_test.append(evaluation_test(0)[0])
+        X_R2_test.append(evaluation_test(0)[1])
 
-    X_RMSE_train_all.append(np.sum(X_RMSE_train) / np.array(X_RMSE_train).shape)
-    X_R2_train_all.append(np.sum(X_R2_train) / np.array(X_R2_train).shape)
-    X_RMSE_test_all.append(np.sum(X_RMSE_test) / np.array(X_RMSE_test).shape)
-    X_R2_test_all.append(np.sum(X_R2_test) / np.array(X_R2_test).shape)
+        Y_RMSE_test.append(evaluation_test(1)[0])
+        Y_R2_test.append(evaluation_test(1)[1])
 
-    Y_RMSE_train_all.append(np.sum(Y_RMSE_train) / np.array(Y_RMSE_train).shape)
-    Y_R2_train_all.append(np.sum(Y_R2_train) / np.array(Y_R2_train).shape)
-    Y_RMSE_test_all.append(np.sum(Y_RMSE_test) / np.array(Y_RMSE_test).shape)
-    Y_R2_test_all.append(np.sum(Y_R2_test) / np.array(Y_R2_test).shape)
+        Z_RMSE_test.append(evaluation_test(2)[0])
+        Z_R2_test.append(evaluation_test(2)[1])
 
-    Z_RMSE_train_all.append(np.sum(Z_RMSE_train) / np.array(Z_RMSE_train).shape)
-    Z_R2_train_all.append(np.sum(Z_R2_train) / np.array(Z_R2_train).shape)
-    Z_RMSE_test_all.append(np.sum(Z_RMSE_test) / np.array(Z_RMSE_test).shape)
-    Z_R2_test_all.append(np.sum(Z_R2_test) / np.array(Z_R2_test).shape)
+    X_RMSE_train_all, X_R2_train_all = evaluation_all(X_RMSE_train, X_R2_train)
+    Y_RMSE_train_all, Y_R2_train_all = evaluation_all(Y_RMSE_train, Y_R2_train)
+    Z_RMSE_train_all, Z_R2_train_all = evaluation_all(Z_RMSE_train, Z_R2_train)
+
+    X_RMSE_test_all, X_R2_test_all = evaluation_all(X_RMSE_test, X_R2_test)
+    Y_RMSE_test_all, Y_R2_test_all = evaluation_all(Y_RMSE_test, Y_R2_test)
+    Z_RMSE_test_all, Z_R2_test_all = evaluation_all(Z_RMSE_test, Z_R2_test)
 
     print('train error')
     print(
         'X_RMSE_train: %.4f, X_R2_train: %.4f, Y_RMSE_train: %.4f, Y_R2_train: %.4f, Z_RMSE_train: %.4f, Z_R2_train: %.4f'
-        % (np.sum(X_RMSE_train) / np.array(X_RMSE_train).shape, np.sum(X_R2_train) / np.array(X_R2_train).shape,
-           np.sum(Y_RMSE_train) / np.array(Y_RMSE_train).shape, np.sum(Y_R2_train) / np.array(Y_R2_train).shape,
-           np.sum(Z_RMSE_train) / np.array(Z_RMSE_train).shape, np.sum(Z_R2_train) / np.array(Z_R2_train).shape))
+        % (X_RMSE_train_all, X_R2_train_all,
+           Y_RMSE_train_all, Y_R2_train_all,
+           Z_RMSE_train_all, Z_R2_train_all))
     print('test error')
     print(
         'X_RMSE_test: %.4f, X_R2_test: %.4f, Y_RMSE_test: %.4f, Y_R2_test: %.4f, Z_RMSE_test: %.4f, Z_R2_test: %.4f'
-        % (np.sum(X_RMSE_test) / np.array(X_RMSE_test).shape, np.sum(X_R2_test) / np.array(X_R2_test).shape,
-           np.sum(Y_RMSE_test) / np.array(Y_RMSE_test).shape, np.sum(Y_R2_test) / np.array(Y_R2_test).shape,
-           np.sum(Z_RMSE_test) / np.array(Z_RMSE_test).shape, np.sum(Z_R2_test) / np.array(Z_R2_test).shape))
+        % (X_RMSE_test_all, X_R2_test_all,
+           Y_RMSE_test_all, Y_R2_test_all,
+           Z_RMSE_test_all, Z_R2_test_all))
 
 data_all = np.hstack((np.array(train_acc).reshape(-1, 2), np.array(test_acc).reshape(-1, 2), np.array(model_time).reshape(-1, 1)))
 pd.DataFrame(data_all).to_csv('%s/train_result.csv' %(train_save_path),
