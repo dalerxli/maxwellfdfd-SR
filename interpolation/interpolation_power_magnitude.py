@@ -97,31 +97,6 @@ def createFolder(directory):
         print('Error: Creating directory. ' + directory)
     return directory
 
-def PSNR(compressed, original):
-    mse = np.mean((original - compressed) ** 2)
-    if (mse == 0):  # MSE is zero means no noise is present in the signal .
-        # Therefore PSNR have no importance.
-        return 100
-    max_pixel_ori = np.max(original)
-    max_pixel_com = np.max(compressed)
-    psnr_ori = 20 * np.log10(max_pixel_ori / np.sqrt(mse))
-    psnr_com = 20 * np.log10(max_pixel_com / np.sqrt(mse))
-    return psnr_com, psnr_ori
-
-def evaluation(k):
-    RMSE = mean_squared_error(xdata[j][:, :, k], ydata[j][:, :, k]) ** 0.5
-    R2 = r2_score(xdata[j][:, :, k], ydata[j][:, :, k])
-    psnr = PSNR(xdata[j][:, :, k], ydata[j][:, :, k])[0]
-
-    return RMSE, R2, psnr
-
-def evaluation_all(RMSE, R2, psnr):
-    RMSE_ = np.sum(RMSE) / np.array(RMSE).shape
-    R2_ = np.sum(R2) / np.array(R2).shape
-    psnr_ = np.sum(psnr) / np.array(psnr).shape
-
-    return RMSE_, R2_, psnr_
-
 data_location = input('server --> s or computer --> c: ')
 if data_location == 's':
     print('server')
@@ -150,74 +125,14 @@ xdata, ydata = np.array(xdata), np.array(ydata)
 xdata[xdata < 0] = 0
 ydata[ydata < 0] = 0
 
-X_RMSE_ydata, X_R2_ydata, X_psnr = [], [], []
-Y_RMSE_ydata, Y_R2_ydata, Y_psnr = [], [], []
-Z_RMSE_ydata, Z_R2_ydata, Z_psnr = [], [], []
+power_RMSE = []
+power_R2 = []
+for i in range(xdata.shape[0]):
+    power = np.sqrt(np.power(xdata[i][399:400, :, 0], 2) + np.power(xdata[i][399:400, :, 1], 2)) * xdata[i][399:400, :, 2]
+    power_real = np.sqrt(np.power(ydata[i][399:400, :, 0], 2) + np.power(ydata[i][399:400, :, 1], 2)) * ydata[i][399:400, :, 2]
 
-parameters = {'xtick.labelsize': 20, 'ytick.labelsize': 20}
-plt.rcParams.update(parameters)
-plt.figure(figsize=(8, 8))
-
-for j in range(np.array(ydata).shape[0]):
-    X_RMSE_ydata.append(evaluation(0)[0])
-    X_R2_ydata.append(evaluation(0)[1])
-    X_psnr.append(evaluation(0)[2])
-
-    Y_RMSE_ydata.append(evaluation(1)[0])
-    Y_R2_ydata.append(evaluation(1)[1])
-    Y_psnr.append(evaluation(1)[2])
-
-    Z_RMSE_ydata.append(evaluation(2)[0])
-    Z_R2_ydata.append(evaluation(2)[1])
-    Z_psnr.append(evaluation(2)[2])
-
-    if divmod(j, 100)[1] == 0:
-        plt.scatter(xdata[j][:, :, 0].reshape(1, -1), ydata[j][:, :, 0].reshape(1, -1), c='black', s=1, alpha=0.4)
-        plt.scatter(xdata[j][:, :, 1].reshape(1, -1), ydata[j][:, :, 1].reshape(1, -1), c='black', s=1, alpha=0.4)
-        plt.scatter(xdata[j][:, :, 2].reshape(1, -1), ydata[j][:, :, 2].reshape(1, -1), c='black', s=1, alpha=0.4)
-
-X_RMSE_ydata_all, X_R2_ydata_all, X_psnr_all = evaluation_all(X_RMSE_ydata, X_R2_ydata, X_psnr)
-Y_RMSE_ydata_all, Y_R2_ydata_all, Y_psnr_all = evaluation_all(Y_RMSE_ydata, Y_R2_ydata, Y_psnr)
-Z_RMSE_ydata_all, Z_R2_ydata_all, Z_psnr_all = evaluation_all(Z_RMSE_ydata, Z_R2_ydata, Z_psnr)
-
-print('ydata error')
-print(
-    'X_RMSE_ydata: %.4f, X_R2_ydata: %.4f, X_psnr: %.4f, '
-    'Y_RMSE_ydata: %.4f, Y_R2_ydata: %.4f, Y_psnr: %.4f, '
-    'Z_RMSE_ydata: %.4f, Z_R2_ydata,: %.4f, Z_psnr: %.4f '
-
-    % (X_RMSE_ydata_all, X_R2_ydata_all, X_psnr_all,
-       Y_RMSE_ydata_all, Y_R2_ydata_all, Y_psnr_all,
-       Z_RMSE_ydata_all, Z_R2_ydata_all, Z_psnr_all))
-
-for i in [1, -1]:
-    prediction_save_path = createFolder('%s/predict_data/' % (save_path))
-    pd.DataFrame(xdata[i][:, :, 0]).to_csv('%s/%s_X.csv' % (prediction_save_path, i + 1))
-    pd.DataFrame(xdata[i][:, :, 1]).to_csv('%s/%s_Y.csv' % (prediction_save_path, i + 1))
-    pd.DataFrame(xdata[i][:, :, 2]).to_csv('%s/%s_Z.csv' % (prediction_save_path, i + 1))
-
-pd.DataFrame(xdata[800][:, :, 0]).to_csv('%s/9_X.csv' % (prediction_save_path))
-pd.DataFrame(xdata[800][:, :, 1]).to_csv('%s/9_Y.csv' % (prediction_save_path))
-pd.DataFrame(xdata[800][:, :, 2]).to_csv('%s/9_Z.csv' % (prediction_save_path))
+    power_RMSE.append(mean_squared_error(power, power_real) ** 0.5)
+    power_R2.append(r2_score(power.reshape(-1, 1), power_real.reshape(-1, 1)))
 
 
-plt.xlabel('Prediction', fontsize=30)
-plt.ylabel('Actual', fontsize=30)
-plt.xlim([0, 3])
-plt.ylim([0, 3])
-plt.xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
-plt.yticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0], labels=[0, '', 1, '', 2, '', 3])
-plt.savefig('%s/interpolation.tiff' % (save_path), dpi=300)
-plt.clf()
-
-data_all = [[float(X_RMSE_ydata_all), float(X_R2_ydata_all), float(X_psnr_all),
-            float(Y_RMSE_ydata_all), float(Y_R2_ydata_all), float(Y_psnr_all),
-            float(Z_RMSE_ydata_all), float( Z_R2_ydata_all), float(Z_psnr_all)]]
-
-pd.DataFrame(data_all).to_csv('%s/result.csv' % (save_path),
-                                  header=['X_RMSE', 'X_R2', 'X_psnr',
-                                          'Y_RMSE', 'Y_R2', 'Y_psnr',
-                                          'Z_RMSE', 'Z_R2', 'Z_psnr'], index=False)
-
-# ydata error
-# X_RMSE_ydata: 0.0536, X_R2_ydata: 0.5151, Y_RMSE_ydata: 0.0120, Y_R2_ydata: 0.9011, Z_RMSE_ydata: 0.0207, Z_R2_ydata: 0.7850
+pd.DataFrame(np.hstack((np.mean(power_RMSE), np.mean(power_R2))).reshape(1,-1)).to_csv('%s/power.csv' %save_path, header=['RMSE', 'R2'], index=False)
